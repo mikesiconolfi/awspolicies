@@ -1,0 +1,83 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowSelfManagement",
+            "Effect": "Allow",
+            "Action": [
+                "iam:UploadSigningCertificate",
+                "iam:UploadSSHPublicKey",
+                "iam:UpdateUser",
+                "iam:UpdateLoginProfile",
+                "iam:UpdateAccessKey",
+                "iam:ResyncMFADevice",
+                "iam:List*",
+                "iam:Get*",
+                "iam:GenerateServiceLastAccessedDetails",
+                "iam:GenerateCredentialReport",
+                "iam:EnableMFADevice",
+                "iam:DeleteVirtualMFADevice",
+                "iam:DeleteLoginProfile",
+                "iam:DeleteAccessKey",
+                "iam:CreateVirtualMFADevice",
+                "iam:CreateLoginProfile",
+                "iam:CreateAccessKey",
+                "iam:ChangePassword"
+            ],
+            "Resource": [
+                "arn:aws:iam::591404979362:user/*/${aws:username}",
+                "arn:aws:iam::591404979362:user/${aws:username}",
+                "arn:aws:iam::591404979362:mfa/${aws:username}"
+            ]
+        },
+        {
+            "Sid": "AllowIAMReadOnly",
+            "Effect": "Allow",
+            "Action": [
+                "iam:List*",
+                "iam:Get*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "AllowDeactivateMFADevice",
+            "Effect": "Allow",
+            "Action": "iam:DeactivateMFADevice",
+            "Resource": [
+                "arn:aws:iam::591404979362:user/*/${aws:username}",
+                "arn:aws:iam::591404979362:user/${aws:username}",
+                "arn:aws:iam::591404979362:mfa/${aws:username}"
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:MultiFactorAuthPresent": "true"
+                },
+                "NumericLessThan": {
+                    "aws:MultiFactorAuthAge": "3600"
+                }
+            }
+        },
+        {
+            "Sid": "DenyAllExceptListedIfNoMFA",
+            "Effect": "Deny",
+            "NotAction": [
+                "sts:GetSessionToken",
+                "iam:ResyncMFADevice",
+                "iam:ListVirtualMFADevices",
+                "iam:ListMFADevices",
+                "iam:GetUser",
+                "iam:EnableMFADevice",
+                "iam:CreateVirtualMFADevice"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "ArnNotLike": {
+                    "aws:PrincipalARN": "arn:aws:iam::*:user/ProgrammaticAccessOnly/*"
+                },
+                "BoolIfExists": {
+                    "aws:MultiFactorAuthPresent": "false"
+                }
+            }
+        }
+    ]
+}
