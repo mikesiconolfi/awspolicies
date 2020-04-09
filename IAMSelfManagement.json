@@ -25,9 +25,9 @@
                 "iam:ChangePassword"
             ],
             "Resource": [
-                "arn:aws:iam::591404979362:user/*/${aws:username}",
-                "arn:aws:iam::591404979362:user/${aws:username}",
-                "arn:aws:iam::591404979362:mfa/${aws:username}"
+                "arn:aws:iam::ACCOUNTID:user/*/${aws:username}",
+                "arn:aws:iam::ACCOUNTID:user/${aws:username}",
+                "arn:aws:iam::ACCOUNTID:mfa/${aws:username}"
             ]
         },
         {
@@ -44,9 +44,9 @@
             "Effect": "Allow",
             "Action": "iam:DeactivateMFADevice",
             "Resource": [
-                "arn:aws:iam::591404979362:user/*/${aws:username}",
-                "arn:aws:iam::591404979362:user/${aws:username}",
-                "arn:aws:iam::591404979362:mfa/${aws:username}"
+                "arn:aws:iam::ACCOUNTID:user/*/${aws:username}",
+                "arn:aws:iam::ACCOUNTID:user/${aws:username}",
+                "arn:aws:iam::ACCOUNTID:mfa/${aws:username}"
             ],
             "Condition": {
                 "Bool": {
